@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+####### Configure environment
+
+set -o errexit    # always exit on error
+set -o pipefail   # don't ignore exit codes when piping output
+set -o posix      # more strict failures in subshells
+# set -x          # enable debugging
+
+# Configure directories
+BUILD_DIR=$1
+CACHE_DIR=$2
+ENV_DIR=$3
+HEROKU_DIR=$BUILD_DIR/.heroku
+
+mkdir -p $HEROKU_DIR/mongo
+warnings=$(mktemp)
+
+# Install mongodb to use mongo commands
+VERSION=3.0.11
+echo "Downloading and installing mongodb version $VERSION ..."
+FILE_NAME="mongodb-linux-x86_64-$VERSION.tgz"
+download_url="https://fastdl.mongodb.org/linux/${FILE_NAME}"
+curl $download_url -s -o - | tar xzf - -C /tmp
+
+# Move mongodb binaries into the app directory
+mv /tmp/mongodb-linux-x86_64-$VERSION/* $HEROKU_DIR/mongo
+chmod +x $HEROKU_DIR/mongo/bin/*
+
+echo "Creating run-time environment"
+mkdir -p $BUILD_DIR/.profile.d
+echo "export PATH=\"\$HOME/.heroku/mongo/bin:\$PATH\"" > $BUILD_DIR/.profile.d/mongo.sh
