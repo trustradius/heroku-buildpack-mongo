@@ -19,12 +19,12 @@ warnings=$(mktemp)
 # Install mongodb to use mongo commands
 VERSION=3.4.10
 echo "Downloading and installing mongodb version $VERSION ..."
-FILE_NAME="mongodb-linux-x86_64-ubuntu1604-${VERSION}.tgz"
-download_url="https://fastdl.mongodb.org/linux/${FILE_NAME}"
+BASE_FILE_NAME="mongodb-linux-x86_64-ubuntu1604-${VERSION}"
+download_url="https://fastdl.mongodb.org/linux/${BASE_FILE_NAME}.tgz"
 curl $download_url -s -o - | tar xzf - -C /tmp
 
 # Move mongodb binaries into the app directory
-mv /tmp/mongodb-linux-x86_64-$VERSION/* $HEROKU_DIR/mongo
+mv /tmp/${BASE_FILE_NAME}/* $HEROKU_DIR/mongo
 chmod +x $HEROKU_DIR/mongo/bin/*
 
 echo "Creating run-time environment"
