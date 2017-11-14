@@ -17,9 +17,9 @@ mkdir -p $HEROKU_DIR/mongo
 warnings=$(mktemp)
 
 # Install mongodb to use mongo commands
-VERSION=3.2.10
+VERSION=3.4.10
 echo "Downloading and installing mongodb version $VERSION ..."
-FILE_NAME="mongodb-linux-x86_64-$VERSION.tgz"
+FILE_NAME="mongodb-linux-x86_64-ubuntu1604-${VERSION}.tgz"
 download_url="https://fastdl.mongodb.org/linux/${FILE_NAME}"
 curl $download_url -s -o - | tar xzf - -C /tmp
 
